@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "Chrono",
-    "slug": "Chrono",
+    "name": "ToDoChrono",
+    "slug": "ToDoChrono",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/stopwatch11.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -17,13 +17,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "ToDoChrono.apk"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "ToDoChrono.apk"
     },
     "web": {
       "favicon": "./assets/favicon.png"
