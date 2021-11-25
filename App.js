@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import StopWatch from './components/StopWatch';
 import Homescreen from './components/Homescreen';
+import styled from '@emotion/native';
 
 //create variable Stack for mai Navigation
 const Stack = createNativeStackNavigator();
@@ -24,8 +25,7 @@ export default function App() {
             presentation: 'modal',
             headerRight: () =>
               <TouchableOpacity title="StopWatch" onPress={() => navigation.navigate('StopWatch')}>
-                <Image
-                  style={styles.tinyLogo}
+                <Image1
                   source={require('./assets/stopwatch.jpg')}
                 />
               </TouchableOpacity>
@@ -54,11 +54,16 @@ export default function App() {
 };
 
 
-
-const styles = StyleSheet.create({  
+/*
+const styles = StyleSheet.create({
   tinyLogo: {
     width: 35,
     height: 35,
     borderRadius: 35,
   },
-});
+});*/
+const Image1 = styled.Image`
+    width: 35px;
+    height: 35px;
+    border-radius: 20px;
+`;

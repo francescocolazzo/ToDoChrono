@@ -1,8 +1,22 @@
-import React, { Component } from 'react'
-import {
-  StyleSheet, Text, View, ScrollView, TouchableOpacity
-} from 'react-native'
-import moment from 'moment'
+import React, { Component } from 'react';
+import { Text, ScrollView} from 'react-native';
+import moment from 'moment';
+import styled, { css } from '@emotion/native';
+
+function TimerFirst({ interval }) {
+  //create function pad, if the argument < 10 then add 0 
+  const pad = (n) => n < 10 ? '0' + n : n
+  const duration = moment.duration(interval)
+  const centiseconds = Math.floor(duration.milliseconds() / 10)
+  return (
+    <TimerContainer>
+      <TimerText>{pad(duration.minutes())}:</TimerText>
+      <TimerText >{pad(duration.seconds())},</TimerText>
+      <TimerText>{pad(centiseconds)}</TimerText>
+    </TimerContainer>
+  )
+}
+
 
 function Timer({ interval, style }) {
   //create function pad, if the argument < 10 then add 0 
@@ -10,38 +24,40 @@ function Timer({ interval, style }) {
   const duration = moment.duration(interval)
   const centiseconds = Math.floor(duration.milliseconds() / 10)
   return (
-    <View style={styles.timerContainer}>
+    <TimerContainer>
       <Text style={style}>{pad(duration.minutes())}:</Text>
       <Text style={style}>{pad(duration.seconds())},</Text>
       <Text style={style}>{pad(centiseconds)}</Text>
-    </View>
+    </TimerContainer>
   )
 }
 
+
 function RoundButton({ title, color, background, onPress, disabled }) {
   return (
-    <TouchableOpacity
+    <RoundButtonTouchOpacity
       onPress={() => !disabled && onPress()}
-      style={[styles.button, { backgroundColor: background }]}
+      style={ { backgroundColor: background }}
       activeOpacity={disabled ? 1.0 : 0.7}
     >
-      <View style={styles.buttonBorder}>
-        <Text style={[styles.buttonTitle, { color }]}>{title}</Text>
-      </View>
-    </TouchableOpacity>
+      <ButtonBorder>
+        <Text style={[css `font-size: 18px;`, { color }]}>{title}</Text>
+      </ButtonBorder>
+    </RoundButtonTouchOpacity>
   )
 }
+
 function Lap({ number, interval, fastest, slowest }) {
   const lapStyle = [
-    styles.lapText,
-    fastest && styles.fastest,  //if fastest(green) style == styles.fastest
-    slowest && styles.slowest,  //if fastest(red) style == styles.fastest
+    css`color: #FFFFFF; font-size: 18px;`,
+    fastest && css`color: #4BC05F;`,  //if fastest(green) style == styles.fastest
+    slowest && css`color: #CC3531`,  //if fastest(red) style == styles.fastest
   ]
   return (
-    <View style={styles.lap}>
+    <LapView>
       <Text style={lapStyle}>Lap {number}</Text>
-      <Timer style={[lapStyle, styles.lapTimer]} interval={interval} />
-    </View>
+      <Timer style={[lapStyle, css` width: 30px;` ]} interval={interval} />
+    </LapView>
   )
 }
 
@@ -57,7 +73,7 @@ function LapsTable({ laps, timer }) {
     })
   }
   return (
-    <ScrollView style={styles.scrollView}>
+    <ScrollView style={css `align-self: stretch;`}>
       {laps.map((lap, index) => (
         <Lap
           number={laps.length - index}
@@ -73,7 +89,7 @@ function LapsTable({ laps, timer }) {
 
 function ButtonsRow({ children }) {
   return (
-    <View style={styles.buttonsRow}>{children}</View>
+    <ButtonsRowView>{children}</ButtonsRowView>
   )
 }
 export default class App extends Component {
@@ -145,10 +161,9 @@ export default class App extends Component {
     const { now, start, laps } = this.state
     const timer = now - start
     return (
-      <View style={styles.container}>
-        <Timer
+      <Container>
+        <TimerFirst
           interval={laps.reduce((total, curr) => total + curr, 0) + timer}
-          style={styles.timer}
         />
         {/* Button Lap and Start*/}
         {laps.length === 0 && (
@@ -203,74 +218,55 @@ export default class App extends Component {
           </ButtonsRow>
         )}
         <LapsTable laps={laps} timer={timer} />
-      </View>
+      </Container>
     )
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#0D0D0D',
-    alignItems: 'center',
-    paddingTop: 130,
-    paddingHorizontal: 20,
-  },
-  timer: {
-    color: '#FFFFFF',
-    fontSize: 76,
-    fontWeight: '200',
-    width: 110,
-  },
-  button: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonTitle: {
-    fontSize: 18,
-  },
-  buttonBorder: {
-    width: 76,
-    height: 76,
-    borderRadius: 38,
-    borderWidth: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonsRow: {
-    flexDirection: 'row',
-    alignSelf: 'stretch',
-    justifyContent: 'space-between',
-    marginTop: 80,
-    marginBottom: 30,
-  },
-  lapText: {
-    color: '#FFFFFF',
-    fontSize: 18,
-  },
-  lapTimer: {
-    width: 30,
-  },
-  lap: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    borderColor: '#151515',
-    borderTopWidth: 1,
-    paddingVertical: 10,
-  },
-  scrollView: {
-    alignSelf: 'stretch',
-  },
-  fastest: {
-    color: '#4BC05F',
-  },
-  slowest: {
-    color: '#CC3531',
-  },
-  timerContainer: {
-    flexDirection: 'row',
-  }
-})
+const Container = styled.View`
+  display: flex;
+  background-color: #0D0D0D;
+  alignItems: center;
+  padding: 130px 20px 350px 20px;
+`
+const TimerContainer = styled.View`
+  flex-direction: row;
+`;
+
+const TimerText = styled.Text`
+  color: #FFFFFF;
+  font-size: 76px;
+  font-weight: 200;
+  width: 110px;
+`;
+
+const LapView = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  border-color: #151515;
+  border-top-width: 1px;
+  padding: 10px 0px 10px 0px; `
+
+const ButtonBorder = styled.View`
+  width: 76px;
+  height: 76px;
+  border-radius: 38px;
+  border-width: 1px;
+  justifyContent: center;
+  alignItems: center; `
+
+const ButtonsRowView = styled.View`
+    flex-direction: row;
+    align-self: stretch;
+    justify-content: space-between;
+    margin-top: 80px;
+    margin-bottom: 30px;
+`
+const RoundButtonTouchOpacity = styled.TouchableOpacity`
+    width: 80px;
+    height: 80px;
+    border-radius: 40px;
+    justify-content: center;
+    align-items: center;
+`
+
