@@ -1,7 +1,7 @@
 import React,{useState} from 'react';
-import {KeyboardAvoidingView, StyleSheet, Text, View, TextInput, TouchableOpacity, Keyboard, ScrollView } from 'react-native';
+import {KeyboardAvoidingView, StyleSheet, View, TextInput, TouchableOpacity, Keyboard, ScrollView } from 'react-native';
 import Task from './Task';
-
+import styled, { css } from '@emotion/native';
 
 
 
@@ -26,7 +26,7 @@ const HomeScreen = ({ navigation }) => {
   }
   
   return (
-    <View style={styles.container}>
+    <Container>
 
     {/* Added this scroll view to enable scrolling when list gets longer than the page */}
     <ScrollView
@@ -35,8 +35,8 @@ const HomeScreen = ({ navigation }) => {
       }}
       keyboardShouldPersistTaps='handled' >
      
-      <View style={styles.tasksWrapper}>
-        <View style={styles.items}>
+      <TasksWrapperView>
+        <ItemsView>
           {/* This is where the tasks will go! */}
           {
             taskItems.map((item, index) => {
@@ -47,96 +47,69 @@ const HomeScreen = ({ navigation }) => {
               )
             })
           }
-        </View>
-      </View>
+        </ItemsView>
+      </TasksWrapperView>
 
     </ScrollView>
 
     {/* Uses a keyboard avoiding view which ensures the keyboard does not cover the items on screen(proprietà ios = padding) */}
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.writeTaskWrapper}
+      style={css `
+      position: absolute;
+      bottom: 60px;
+      width: 100%;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      `}
     >
-      <TextInput style={styles.input} placeholder={'Write a task'} value={task} onChangeText={text => setTask(text)} />
+      <TextInputT placeholder={'Write a task'} value={task} onChangeText={text => setTask(text)} />
       <TouchableOpacity onPress={() => handleAddTask()}>
-        <View style={styles.addWrapper}>
-          <Text style={styles.addText1}>+</Text>
-        </View>
+        <AddWrapperView>
+          <TextAdd>+</TextAdd>
+        </AddWrapperView>
       </TouchableOpacity>
     </KeyboardAvoidingView>
 
-  </View>
+  </Container>
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#E8EAED',
-    //alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
-  tasksWrapper: {
-    paddingTop: 80,
-    paddingHorizontal: 20,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: 'bold'
-  },
-  items: {
-    marginTop: 30,
-  },
-  writeTaskWrapper: {
-    position: 'absolute',
-    bottom: 60,
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center'
-  },
-  input: {
-    paddingVertical: 15,
-    paddingHorizontal: 15,
-    backgroundColor: 'papayawhip',
-    borderRadius: 10,
-    borderColor: '#f3be4f',
-    borderWidth: 1,
-    width: 250,
-  },
-  addWrapper: {
-    width: 60,
-    height: 60,
-    backgroundColor: 'papayawhip',
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderColor: '#f3be4f',
-    borderWidth: 1,
-  },
-  crono: {
-    width: 100,
-    height: 40,
-    backgroundColor: '#55BCF6',
-    borderRadius: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderColor: '#f3be4f',
-    borderWidth: 1,
+const TextAdd = styled.Text`
+  color: #f3be4f;`
 
+const Container = styled.View`
+    display: flex;
+    background-color: #E8EAED;
+    justify-content: flex-start;
+`
 
-  },
-  addText: {
-    color: '#FFFFFF'
-  },
-  addText1: {
-    color: '#f3be4f'
-  },
-  tinyLogo: {
-    width: 35,
-    height: 35,
-    borderRadius: 35,
-  },
-});
+const TasksWrapperView = styled.View`
+    padding : 150px 10px 600px 10px;
+    height: 100%;
+` 
+
+const AddWrapperView = styled.View`
+  width: 60px;
+  height: 60px;
+  background-color: papayawhip;
+  border-radius: 10px;
+  justify-content: center;
+  align-items: center;
+  border-color: #f3be4f;
+  border-width: 1px;
+`
+const TextInputT = styled.TextInput`
+  padding : 15px 10px 15px 15px;
+  background-color: papayawhip;
+  border-radius: 10px;
+  border-color: #f3be4f;
+  border-width: 1px;
+  width: 250px;
+`
+const ItemsView = styled.View`
+  margin-top: 30px;
+`
 
 export default HomeScreen;
