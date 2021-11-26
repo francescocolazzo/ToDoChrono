@@ -1,9 +1,9 @@
 # ToDoChrono
 
 - I created a NavigationContainer, with two Stack.Group.
-- Each Stack.Group has differents properties and Stack.Screen.
-- The property "component" into Stack.Screen contains the name of the component that we imported (class or function )
-- In StopWatch.js I used the Hook State with a class 
+- Each Stack.Group has different properties and Stack.Screen.
+- The property "component" into Stack.Screen contains the name of the component that we import (class or function )
+- In StopWatch.js I have used the Hook State with a class 
 
 ```
   constructor(props) {
@@ -24,7 +24,7 @@
     })
  ```   
     
-- While for the HomeScreen and Task component I used the function.
+- While for the HomeScreen and Task component I have used the functions.
 - Use and Set of Hook State with a function:
 
   ```
